@@ -1,7 +1,6 @@
 {
   "name": "@barelyhuman/jinks",
-  "version": "0.0.1-1",
-  "main": "dist/index.js",
+  "version": "0.0.1-2",
   "browser": "dust/index.global.js",
   "exports": {
     "./package.json": "./package.json",
