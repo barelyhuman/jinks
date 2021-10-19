@@ -1,14 +1,18 @@
 {
   "name": "@barelyhuman/jinks",
-  "version": "0.0.0",
+  "version": "0.0.1-0",
   "main": "dist/index.js",
   "browser": "dust/index.global.js",
   "exports": {
+    "./package.json": "./package.json",
     ".": {
       "import": "./dist/index.mjs",
       "default": "./dist/index.js"
     }
   },
+  "files": [
+    "dist/*"
+  ],
   "keywords": [
     "links",
     "extract links from strings",
@@ -23,7 +27,8 @@
     "size": "GITHUB_TOKEN='' bundlesize",
     "test": "npm run test:cjs; npm run test:mjs",
     "test:cjs": "node tests/cjs.js",
-    "test:mjs": "node -r esm tests/mjs.js"
+    "test:mjs": "node -r esm tests/mjs.js",
+    "prepublishOnly": "npm run build"
   },
   "bundlesize": [
     {
