@@ -1,9 +1,8 @@
 {
   "name": "@barelyhuman/jinks",
-  "version": "0.0.1-3",
+  "version": "0.0.1-7",
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "browser": "./dist/index.global.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist/*"
   ],
@@ -16,12 +15,10 @@
   "author": "Reaper <ahoy@barelyhuman.dev>",
   "license": "MIT",
   "scripts": {
-    "build": "tsup --format esm,cjs,iife",
-    "dev": "tsup --watch",
+    "build": "tsc",
+    "dev": "tsc --watch",
     "size": "GITHUB_TOKEN='' bundlesize",
-    "test": "npm run test:cjs; npm run test:mjs",
-    "test:cjs": "node tests/cjs.js",
-    "test:mjs": "node -r esm tests/mjs.js",
+    "test": "uvu tests",
     "prepublishOnly": "npm run build"
   },
   "bundlesize": [
@@ -30,18 +27,17 @@
       "maxSize": "1 kB"
     },
     {
-      "path": "./dist/index.mjs",
+      "path": "./dist/esm/index.js",
       "maxSize": "1 kB"
     },
     {
-      "path": "./dist/index.global.js",
+      "path": "./dist/iife/index.js",
       "maxSize": "1 kB"
     }
   ],
   "devDependencies": {
     "bundlesize": "^0.18.1",
     "esm": "^3.2.25",
-    "tsup": "^5.4.1",
     "typescript": "^4.4.4",
     "uvu": "^0.5.2"
   }

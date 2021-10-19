@@ -1,14 +1,13 @@
-// THIS FILE IS A DUPLICATE OF `cjs.js` BUT WITH IMPORTS AS ESM
+const { test } = require("uvu");
+const assert = require("uvu/assert");
+const { jinks, matcher } = require("../dist");
 
-import { test } from "uvu";
-import * as assert from "uvu/assert";
-// Hard required to make sure we get the mjs file
-import { jinks, matcher } from "../dist/index.mjs";
 const TEXTS = {
   WITH_LINKS: `Lorem Ipsum is https://github.com/barelyhuman of the https://google.com/ industry. Lorem https://dev.to industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,`,
   NO_LINKS:
     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,",
   ONLY_LINK: "https://github.com/barelyhuman",
+  ONLY_LINK2: "https://www.youtube.com/watch?v=w66Jn6W58wE",
 };
 
 test("linked text", () => {
@@ -44,6 +43,7 @@ test("unlinked text", () => {
 
 test("only link", () => {
   const parsed = jinks(TEXTS.ONLY_LINK);
+  const parsedTwo = jinks(TEXTS.ONLY_LINK2);
   const links = [];
   const text = [];
 
@@ -54,8 +54,17 @@ test("only link", () => {
       text.push(item);
     }
   });
+
+  parsedTwo.forEach((item) => {
+    if (item.isLink) {
+      links.push(item);
+    } else {
+      text.push(item);
+    }
+  });
+
   assert.is(text.length, 0);
-  assert.is(links.length, 1);
+  assert.is(links.length, 2);
 });
 
 test("matcher", () => {

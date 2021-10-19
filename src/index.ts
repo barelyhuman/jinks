@@ -1,4 +1,4 @@
-type LinkMatch = {
+export type LinkMatch = {
   isLink: boolean;
   value: string;
 };
@@ -8,7 +8,7 @@ type LinkMatch = {
  * @description tests the given text with a grouping regex for links
  * @param {String} text
  */
-const matcher = (text: string): IterableIterator<RegExpMatchArray> => {
+export const matcher = (text: string): IterableIterator<RegExpMatchArray> => {
   const linkRegex =
     /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
   return String(text).matchAll(linkRegex);
@@ -21,7 +21,7 @@ const matcher = (text: string): IterableIterator<RegExpMatchArray> => {
  * @param {String} textToParse
  * @returns @type {Array<LinkMatch>}
  */
-const jinks = (textToParse: string): LinkMatch[] => {
+export const jinks = (textToParse: string): LinkMatch[] => {
   const linksIterator = matcher(textToParse);
   const classifiedMatches: LinkMatch[] = [];
 
@@ -29,14 +29,19 @@ const jinks = (textToParse: string): LinkMatch[] => {
   const linkMatchesAsArray = [...linksIterator].map((iter) => ({
     link: iter[0],
     index: iter.index,
-    endIndex: iter.index + iter[0].length,
+    endIndex:
+      typeof iter.index != "undefined" ? iter.index + iter[0].length : null,
   }));
 
   let slicedTillIndex = 0;
 
   linkMatchesAsArray.forEach((item) => {
     const prefix = textToParse.slice(slicedTillIndex, item.index);
-    const linkText = textToParse.slice(item.index, item.endIndex);
+    let linkText;
+
+    if (item.endIndex) {
+      linkText = textToParse.slice(item.index, item.endIndex);
+    }
 
     if (prefix) {
       classifiedMatches.push({
@@ -51,7 +56,7 @@ const jinks = (textToParse: string): LinkMatch[] => {
       });
     }
 
-    slicedTillIndex = item.endIndex;
+    slicedTillIndex = item.endIndex || slicedTillIndex;
   });
 
   const remainingText = textToParse.slice(slicedTillIndex);
@@ -65,5 +70,3 @@ const jinks = (textToParse: string): LinkMatch[] => {
 
   return classifiedMatches as LinkMatch[];
 };
-
-export { jinks, matcher };
