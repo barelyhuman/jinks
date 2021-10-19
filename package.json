@@ -1,14 +1,9 @@
 {
   "name": "@barelyhuman/jinks",
   "version": "0.0.1-2",
-  "browser": "dust/index.global.js",
-  "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "import": "./dist/index.mjs",
-      "default": "./dist/index.js"
-    }
-  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "browser": "./dist/index.global.js",
   "files": [
     "dist/*"
   ],
