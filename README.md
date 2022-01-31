@@ -1,6 +1,9 @@
 # JINKS
 
-< 1kB link matcher
+a 662B link in string matcher
+
+- Typesafe
+- Tiny (662B, 411B gzipped)
 
 ## Installation
 
@@ -30,3 +33,7 @@ console.log(parsed[3].value)  // https://google.com
 console.log(parsed[3].isLink) // true
 
 ```
+
+## License
+
+[MIT](LICENSE)
