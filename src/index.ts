@@ -1,72 +1,81 @@
 export type LinkMatch = {
-  isLink: boolean;
-  value: string;
-};
+  isLink: boolean
+  value: string
+}
 
 /**
- * @name matcher
  * @description tests the given text with a grouping regex for links
- * @param {String} text
  */
 export const matcher = (text: string): IterableIterator<RegExpMatchArray> => {
   const linkRegex =
-    /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
-  return String(text).matchAll(linkRegex);
-};
+    /(https?:\/\/)?(www\.)?[-\w@:%.+~#=]{1,256}\.[a-zA-Z\d()]{1,6}\b([-\w()@:%+.~#?&/=]*)/g
+  return String(text).matchAll(linkRegex)
+}
 
 /**
- * @name jinks
  * @description handler that returns formatted values with each link as it's own item in the array.
  * which can then be used to handle dynamic scenarios
- * @param {String} textToParse
- * @returns @type {Array<LinkMatch>}
  */
 export const jinks = (textToParse: string): LinkMatch[] => {
-  const linksIterator = matcher(textToParse);
-  const classifiedMatches: LinkMatch[] = [];
+  const linksIterator = matcher(textToParse)
+  const classifiedMatches: LinkMatch[] = []
 
-  // TODO: remove the additional loop , can be combined with the `forEach` on the bottom
-  const linkMatchesAsArray = [...linksIterator].map((iter) => ({
-    link: iter[0],
-    index: iter.index,
-    endIndex:
-      typeof iter.index != "undefined" ? iter.index + iter[0].length : null,
-  }));
+  let slicedTillIndex = 0
 
-  let slicedTillIndex = 0;
+  for (const linkItem of linksIterator) {
+    if (linkItem.length === 0) {
+      continue
+    }
 
-  linkMatchesAsArray.forEach((item) => {
-    const prefix = textToParse.slice(slicedTillIndex, item.index);
-    let linkText;
+    if (!linkItem[0]) {
+      continue
+    }
 
-    if (item.endIndex) {
-      linkText = textToParse.slice(item.index, item.endIndex);
+    let endIndex
+    if (typeof linkItem.index !== 'undefined') {
+      endIndex = linkItem.index + linkItem[0].length
+    }
+
+    const currentSlice = {
+      link: linkItem[0],
+      index: linkItem.index,
+      endIndex,
+    }
+
+    const prefix = textToParse.slice(slicedTillIndex, currentSlice.index)
+    let linkText
+
+    textToParse.slice(slicedTillIndex, currentSlice.index)
+
+    if (currentSlice.endIndex) {
+      linkText = textToParse.slice(currentSlice.index, currentSlice.endIndex)
     }
 
     if (prefix) {
       classifiedMatches.push({
         value: prefix,
         isLink: false,
-      });
+      })
     }
+
     if (linkText) {
       classifiedMatches.push({
         value: linkText,
         isLink: true,
-      });
+      })
     }
 
-    slicedTillIndex = item.endIndex || slicedTillIndex;
-  });
+    slicedTillIndex = currentSlice.endIndex ?? slicedTillIndex
+  }
 
-  const remainingText = textToParse.slice(slicedTillIndex);
+  const remainingText = textToParse.slice(slicedTillIndex)
 
   if (remainingText) {
     classifiedMatches.push({
       value: remainingText,
       isLink: false,
-    });
+    })
   }
 
-  return classifiedMatches as LinkMatch[];
-};
+  return classifiedMatches
+}
