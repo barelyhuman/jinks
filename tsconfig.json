@@ -1,11 +1,11 @@
 {
-  "extends": "@mvllow/tsconfig",
-  "exclude": ["dist"],
-  // "include": ["./src/"],
-  "compilerOptions": {
-    "outDir": "dist",
-    "declaration": true,
-    "declarationDir": ".",
-    "emitDeclarationOnly": true
-  }
+	"compilerOptions": {
+		"checkJs": true,
+		"allowJs": true,
+		"declaration": true,
+		"emitDeclarationOnly": true,
+		"downlevelIteration": true,
+		"outDir": "dist",
+		"lib": ["es2020"]
+	}
 }

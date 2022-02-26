@@ -1,17 +1,17 @@
 {
   "dist/index.d.ts": {
-    "size": "466B",
-    "brotli": "221B",
-    "gzip": "291B"
+    "size": "235B",
+    "brotli": "144B",
+    "gzip": "173B"
   },
   "dist/index.js": {
-    "size": "662B",
-    "brotli": "363B",
-    "gzip": "411B"
+    "size": "1.148KB",
+    "brotli": "582B",
+    "gzip": "650B"
   },
   "dist/index.mjs": {
-    "size": "596B",
-    "brotli": "333B",
-    "gzip": "367B"
+    "size": "556B",
+    "brotli": "315B",
+    "gzip": "350B"
   }
 }
